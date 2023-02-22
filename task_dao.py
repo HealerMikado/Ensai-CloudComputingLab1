@@ -1,7 +1,6 @@
 from task import Task
 from singleton import Singleton
 from db_connection import DBConnection
-from psycopg2.errors import UniqueViolation
 
 
 class TaskDAO(metaclass=Singleton):
@@ -55,16 +54,12 @@ class TaskDAO(metaclass=Singleton):
         request = "INSERT INTO task ( description, \"user\") VALUES "\
             "(:description, :user) RETURNING id, description, \"user\""
     
-        try :
-            cursor = DBConnection().cursor()
-            cursor.execute(request
-                , {"description":task.description
-                    ,"user":task.user})
-            res = cursor.fetchall()
-            end = True
-        except UniqueViolation as err:
-            pass
-
+        cursor = DBConnection().cursor()
+        cursor.execute(request
+            , {"description":task.description
+                ,"user":task.user})
+        res = cursor.fetchall()
+        end = True
         if res :
             for row in res :
                 task = Task(
