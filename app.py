@@ -28,8 +28,8 @@ async def get_task(id :int):
     return TaskDAO().find_all_task_by_id(id)
 
 @app.get("/instance")
-async def get_task(id :int):
-    return requests.get("http://169.254.169.254/latest/meta-data/instanceId")
+async def get_instance_id(id :int):
+    return requests.get({"InstanceId":"http://169.254.169.254/latest/meta-data/instance-id"})
 
 
 @app.post("/task/")
